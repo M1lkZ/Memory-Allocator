@@ -100,7 +100,7 @@ static bool mergeable(struct block_header const* restrict fst, struct block_head
 }
 
 static bool try_merge_with_next( struct block_header* block ) {
-  if(!mergeable(block, block->next) || block->next == NULL) return false;
+  if(block->next == NULL || !mergeable(block, block->next)) return false;
   struct block_header* nxt = block->next;
   block->capacity.bytes += size_from_capacity(nxt->capacity).bytes;
   block->next = nxt->next;
@@ -117,7 +117,7 @@ struct block_search_result {
 
 
 static struct block_search_result find_good_or_last  ( struct block_header* restrict block, size_t sz ){
-    if (block == NULL) return (struct block_search_result) {.type = BSR_CORRUPTED, .block = NULL};
+    if (block == NULL) return (struct block_search_result) {.type = BSR_CORRUPTED,.block = NULL};
     bool merged = true;
     while (block != NULL){
         do {
