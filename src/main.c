@@ -29,7 +29,7 @@ void test_1_malloc() {
         munmap(heap, HEAP_INIT_SIZE);
         err("Failed test 1: Heap initialization didn't happen");
     }
-    void *alloc = _malloc(2048);
+    void *alloc = _malloc(HEAP_INIT_SIZE / 2);
     if (alloc == NULL) {
         debug_heap(stderr, heap);
         err("Failed test 1: Couldn't allocate memory");
@@ -77,8 +77,8 @@ void test_3_mem_end() {
         munmap(heap, HEAP_INIT_SIZE);
         err("Failed test 3: Heap initialization didn't happen");
     }
-    void *allocated0 = _malloc(4096);
-    void *allocated1 = _malloc(4096);
+    void *allocated0 = _malloc(HEAP_INIT_SIZE);
+    void *allocated1 = _malloc(HEAP_INIT_SIZE);
     struct block_header *header0 = block_get_header(allocated0);
     struct block_header *header1 = block_get_header(allocated1);
     if (header0->next != header1) {
@@ -99,8 +99,8 @@ void test_4_several_blocks() {
     }
     printf("Heap before allocating \n");
     debug_heap(stdout, heap);
-    void *allocated0 = _malloc(1024*4);
-    void *allocated1 = _malloc(1024*16);
+    void *allocated0 = _malloc(HEAP_INIT_SIZE);
+    void *allocated1 = _malloc(HEAP_INIT_SIZE*4);
     printf("Heap after allocating \n");
     debug_heap(stdout, heap);
     struct block_header *block_0 = block_get_header(allocated0);
@@ -122,7 +122,7 @@ void test_5_another_heap() {
         munmap(heap, HEAP_INIT_SIZE);
         err("Failed test 5: Heap initialization didn't happen");
     }
-    void *allocated0 = _malloc(1024*10);
+    void *allocated0 = _malloc(HEAP_INIT_SIZE*3);
     if (allocated0 == NULL){
         munmap(heap, HEAP_INIT_SIZE);
         err("Failed test 5: First allocating gone wrong");
